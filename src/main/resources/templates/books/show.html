@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Book</title>
+</head>
+<body>
+<a th:text="${'Автор книги - ' + book.getAuthor()}">author</a>
+<br/>
+<a th:text="${'Название книги - ' + book.getTitle()}">title</a>
+<br/>
+<a th:text="${'Год написания - ' + book.getYear()}">year</a>
+<hr/>
+<!--Проверка, какое поле есть в наличии - если owner - -->
+<div th:if="${owner}">
+<!--    Показываем владельца-->
+    <span><b>Has the book now: </b></span> <span th:text="${owner.getFullName()}">Person Name</span>
+<!--Кнопка освободить книгу метод patch по id книги-->
+    <br/>
+    <br/>
+    <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
+        <input type="submit" value="Release the book"/>
+    </form>
+    <hr/>
+</div>
+<!--Проверка, какое поле есть в наличии - если people-->
+<div th:if="${people}">
+    <span>This book is available. Whose book is now?</span>
+
+    <form th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+        <label for="person">Choose a person</label>
+        <!--    В форме здесь выпадающий список Person'ов
+        Для объекта из модели "person", для его поля id-->
+        <select th:object="${person}" th:field="*{id}" id="person">
+<!--            Для каждого person передача по значению - id, а надпись - full name-->
+            <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getFullName()}">
+            </option>
+        </select>
+        <input type="submit" value="Set the book"/>
+    </form>
+</div>
+<form th:method="get" th:action="@{/books/{id}/edit(id=${book.getId()})}">
+    <input type="submit" value="Edit">
+</form>
+<br/>
+<!--Здесь кнопка со ссылкой на текущую книгу
+По этой копке, отправив delete-запрос по этой ссылке, мы удалим книгу-->
+<form th:method="delete" th:action="@{/books/{id}(id=${book.getId()})}">
+    <input type="submit" value="Delete">
+</form>
+</body>
+</html>

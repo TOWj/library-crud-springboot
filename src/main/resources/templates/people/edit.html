@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Update person</title>
+</head>
+<body>
+<form th:method="patch" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}">
+    <div>
+        <!--         Надпись для поля name - Name, задаем по id чуть ниже-->
+        <label for="name">Name</label>
+        <!--         Тип содержимого поля - text, применяется для поля fullName, ну и задаем id для label-->
+        <input type="text" th:field="*{fullName}" id="name"/>
+        <div style="color:red" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Full name Error</div>
+        <br/>
+        <label for="yearOfBirth">Year of birth</label>
+        <input type="text" th:field="*{yearOfBirth}" id="yearOfBirth"/>
+        <div style="color:red" th:if="${#fields.hasErrors('yearOfBirth')}" th:errors="*{yearOfBirth}">Year of birth Error</div>
+        <hr/>
+        <!--         Кнопка submit с надписью Create-->
+        <input type="submit" value="Update">
+    </div>
+</form>
+</body>
+</html>

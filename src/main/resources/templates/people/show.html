@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Person</title>
+</head>
+<body>
+<!--Ну здесь просто вывод всей инфы-->
+<p th:text="${'Id - '+ person.getId()}">Id</p>
+<p th:text="${'Name & surname - '+ person.getFullName()}">Full name</p>
+<p th:text="${'Year of birth - '+ person.getYearOfBirth()}">Year of birth</p>
+<!--Проверка, не пустое ли поле books (мы его добавили в ModelAttribute)-->
+<div th:if="${books.isEmpty()}">
+    <!--    Если пустое-->
+    <p>Person doesn't have any books</p>
+
+</div>
+<!--Проверка, не пустое ли поле books (мы его добавили в ModelAttribute)-->
+<div th:if="${!books.isEmpty()}">
+    <!--    Если НЕ пустое-->
+    <hr/>
+    <b>Books:</b>
+    <br/>
+    <table th:each="book : ${books}">
+        <tr>
+            <td>
+                <span th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}"
+                      th:style="${book.isExpired()} ? 'color: red' : 'color: black'">book
+                </span>
+            </td>
+        </tr>
+
+
+        <!--        <tr th:text="${book.getTitle() + ', ' + book.getAuthor()}">book</tr>-->
+    </table>
+</div>
+<hr/>
+<!--Ссылка на страницу edit c id текущего Person, юзаю вместо него кнопку-->
+<!--<a th:href="@{/people/{id}/edit(id=${person.getId()})}">Edit</a>-->
+
+<!--Здесь кнопка со ссылкой на страницу edit c id текущего Person-->
+<form th:method="get" th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <input type="submit" value="Edit">
+</form>
+<br/>
+<!--Здесь кнопка со ссылкой на текущего Person
+По этой копке, отправив delete-запрос по этой ссылке, мы удалим человека-->
+<form th:method="delete" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Delete">
+</form>
+</body>
+</html>
+<!--Страница человека, на которой показаны значения его полей и список книг, которые он-->
+<!--взял. Если человек не взял ни одной книги, вместо списка должен быть текст "Человек-->
+<!--пока не взял ни одной книги".-->
